@@ -38,7 +38,7 @@ class LoginForm extends PureComponent {
   }
 
   render() {
-    if (this.props.currentUser.jwt) return <Redirect to="/game" />
+    if (this.props.currentUser) return <Redirect to="/game" />
 
     return (
       <Form>

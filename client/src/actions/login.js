@@ -1,9 +1,8 @@
 import * as request from 'superagent'
+import { BASE_URL } from '../constants'
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILED = 'LOGIN_FAILED'
-
-const BASE_URL = 'http://localhost:4000'
 
 export const login = (email, password) => dispatch => {
   request

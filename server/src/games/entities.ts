@@ -64,7 +64,7 @@ export class Player extends BaseEntity {
   @ManyToOne(_ => Game, game => game.players)
   game: Game
 
-  // @Column() userId: number
+  @Column() userId: number
 
   @Column('char', { length: 1 })
   symbol: Symbol
