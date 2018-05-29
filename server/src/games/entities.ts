@@ -26,6 +26,8 @@ const defaultMovie: Movie = {
   releaseDate: '1997'
 }
 
+const defaultGuesses = []
+
 @Entity()
 export class Game extends BaseEntity {
   @PrimaryGeneratedColumn() id?: number
@@ -33,7 +35,8 @@ export class Game extends BaseEntity {
   @Column('json', { default: defaultMovie })
   movie: Movie
 
-  @Column('json') guesses: Guesses
+  @Column('json', { default: defaultGuesses, nullable: true })
+  guesses: Guesses
 
   @Column('char', { length: 1, default: 'x' })
   turn: Symbol
@@ -61,7 +64,7 @@ export class Player extends BaseEntity {
   @ManyToOne(_ => Game, game => game.players)
   game: Game
 
-  @Column() userId: number
+  // @Column() userId: number
 
   @Column('char', { length: 1 })
   symbol: Symbol

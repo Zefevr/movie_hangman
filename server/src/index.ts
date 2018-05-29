@@ -8,6 +8,7 @@ import * as IO from 'socket.io'
 import GameController from './games/controller'
 import UserController from './users/controller'
 import LoginController from './logins/controller'
+import User from './users/entity'
 // import * as socketIoJwtAuth from 'socketio-jwt-auth'
 // import { secret } from './jwt'
 
@@ -32,6 +33,18 @@ useKoaServer(app, {
     }
 
     return false
+  },
+  currentUserChecker: async (action: Action) => {
+    const header: string = action.request.headers.authorization
+    if (header && header.startsWith('Bearer ')) {
+      const [, token] = header.split(' ')
+
+      if (token) {
+        const { id } = verify(token)
+        return User.findOne(id)
+      }
+    }
+    return undefined
   }
 })
 
