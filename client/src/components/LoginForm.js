@@ -6,12 +6,34 @@ import { login } from '../actions/login'
 import { Redirect } from 'react-router-dom'
 
 const Form = styled.div`
+  font-family: 'Merriweather', serif;
+  padding: 1rem;
+`
+
+const Input = styled.input`
+  display: block;
   width: 500px;
-  height: 500px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-content: center;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 5px;
+  font-size: 1rem;
+`
+
+const Button = styled.button`
+  padding: 1rem;
+  margin-top: 1rem;
+  background-color: goldenrod;
+  font-weight: strong;
+  border-radius: 5px;
+  font-size: 1rem;
+  border-style: none;
+  box-shadow: 1px 2px;
+`
+
+const Label = styled.label`
+  width: 500px;
+  font-size: 1rem;
+  /* margin: 1rem; */
 `
 
 class LoginForm extends PureComponent {
@@ -43,23 +65,23 @@ class LoginForm extends PureComponent {
     return (
       <Form>
         <form onSubmit={this.handleSubmit.bind(this)}>
-          <input
-            className="input"
+          <Label>Email Address:</Label>
+          <Input
             type="email"
             name="email"
             value={this.state.email}
             placeholder="Please enter your email"
             onChange={this.handleChange.bind(this)}
           />
-          <input
-            className="input"
+          <Label>Password:</Label>
+          <Input
             type="password"
             name="password"
             value={this.state.password}
             placeholder="Please enter your password"
             onChange={this.handleChange.bind(this)}
           />
-          <button type="submit">Login</button>
+          <Button type="submit">Login</Button>
         </form>
       </Form>
     )

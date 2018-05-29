@@ -23,6 +23,13 @@ class Game extends PureComponent {
           <h2>Game #{game.id}</h2>
           <p>Status: {game.status}</p>
         </div>
+        <div className="actions">
+          <button
+            size="small"
+            onClick={() => history.push(`/games/${game.id}`)}>
+            Watch
+          </button>
+        </div>
       </div>
     )
   }
