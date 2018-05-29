@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getGames } from '../actions/games'
+import { getGames, createGame } from '../actions/games'
 import { getUsers } from '../actions/users'
 
 class Game extends PureComponent {
@@ -17,7 +17,7 @@ class Game extends PureComponent {
           <p>
             This game is being played by{' '}
             {game.players
-              .map(player => users[player.userId].firstName)
+              .map(player => users[player.user.id].firstName)
               .join(' and ')}
           </p>
           <h2>Game #{game.id}</h2>
@@ -69,6 +69,6 @@ const mapStateToProps = state => ({
       : Object.values(state.games).sort((a, b) => b.id - a.id)
 })
 
-export default connect(mapStateToProps, { getGames, getUsers })(Game)
-
-// getGames, getUsers, createGame
+export default connect(mapStateToProps, { getGames, getUsers, createGame })(
+  Game
+)
