@@ -41,7 +41,8 @@ export default class GameController {
       }
     })
 
-    return game
+    const displayGame = { ...game, movie: displayTitle }
+    return displayGame
   }
 
   @Authorized()
@@ -78,7 +79,11 @@ export default class GameController {
 
   @Authorized()
   @Get('/games')
-  getGames() {
-    return Game.find()
+  async getGames() {
+    const gamesArray = await Game.find()
+    const allGames = gamesArray.map(game => {
+      return { ...game, movie: showGuess(game.movie.title, game.guesses) }
+    })
+    return allGames
   }
 }
