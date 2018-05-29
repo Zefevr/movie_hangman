@@ -5,6 +5,9 @@ import { verify } from './jwt'
 import * as Koa from 'koa'
 import { Server } from 'http'
 import * as IO from 'socket.io'
+import GameController from './games/controller'
+import UserController from './users/controller'
+import LoginController from './logins/controller'
 // import * as socketIoJwtAuth from 'socketio-jwt-auth'
 // import { secret } from './jwt'
 
@@ -15,7 +18,7 @@ const port = process.env.PORT || 4000
 
 useKoaServer(app, {
   cors: true,
-  controllers: [],
+  controllers: [GameController, UserController, LoginController],
   authorizationChecker: (action: Action) => {
     const header: string = action.request.headers.authorization
     if (header && header.startsWith('Bearer ')) {
