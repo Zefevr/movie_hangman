@@ -4,6 +4,45 @@ import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getGames, createGame } from '../actions/games'
 import { getUsers } from '../actions/users'
+import styled from 'styled-components'
+
+const GamesWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  > h1 {
+    margin: 2rem 0 0 0;
+  }
+`
+
+const GamesList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+`
+
+const GameCard = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem;
+  border: 1px solid #98dbc6;
+`
+
+const Button = styled.button`
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #336b87;
+  background-color: #98dbc6;
+  font-weight: strong;
+  font-size: 1rem;
+  border: 1px solid #5bc8ac;
+`
 
 class Game extends PureComponent {
   static propTypes = {}
@@ -12,7 +51,7 @@ class Game extends PureComponent {
     const { users, history } = this.props
 
     return (
-      <div key={game.id}>
+      <GameCard key={game.id}>
         <div className="content">
           <p>
             This game is being played by{' '}
@@ -24,13 +63,13 @@ class Game extends PureComponent {
           <p>Status: {game.status}</p>
         </div>
         <div className="actions">
-          <button
+          <Button
             size="small"
             onClick={() => history.push(`/games/${game.id}`)}>
             Watch
-          </button>
+          </Button>
         </div>
-      </div>
+      </GameCard>
     )
   }
 
@@ -51,11 +90,11 @@ class Game extends PureComponent {
     if (games === null || users === null) return null
 
     return (
-      <div>
+      <GamesWrapper>
         <h1>GAME BOARD</h1>
-        <button onClick={createGame}>Create Game</button>
-        <div>{games.map(game => this.renderGame(game))}</div>
-      </div>
+        <Button onClick={createGame}>Create Game</Button>
+        <GamesList>{games.map(game => this.renderGame(game))}</GamesList>
+      </GamesWrapper>
     )
   }
 }

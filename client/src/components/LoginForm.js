@@ -5,35 +5,34 @@ import { connect } from 'react-redux'
 import { login } from '../actions/login'
 import { Redirect } from 'react-router-dom'
 
-const Form = styled.div`
-  font-family: 'Merriweather', serif;
+const FormWrapper = styled.div`
+  /* font-family: 'Merriweather', serif; */
   padding: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
-
-const Input = styled.input`
-  display: block;
-  width: 500px;
-  padding: 1rem;
-  margin: 1rem;
-  border-radius: 5px;
-  font-size: 1rem;
-`
-
-const Button = styled.button`
-  padding: 1rem;
-  margin-top: 1rem;
-  background-color: goldenrod;
-  font-weight: strong;
-  border-radius: 5px;
-  font-size: 1rem;
-  border-style: none;
-  box-shadow: 1px 2px;
-`
-
-const Label = styled.label`
-  width: 500px;
-  font-size: 1rem;
-  /* margin: 1rem; */
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #336b87;
+  > input {
+    width: 100%;
+    padding: 1rem;
+    margin: 1rem;
+    border: 1px solid #5bc8ac;
+  }
+  > button {
+    padding: 1rem;
+    margin-top: 1rem;
+    color: #336b87;
+    background-color: #98dbc6;
+    font-weight: strong;
+    font-size: 1rem;
+    border: 1px solid #5bc8ac;
+  }
 `
 
 class LoginForm extends PureComponent {
@@ -63,27 +62,27 @@ class LoginForm extends PureComponent {
     if (this.props.currentUser) return <Redirect to="/game" />
 
     return (
-      <Form>
-        <form onSubmit={this.handleSubmit.bind(this)}>
-          <Label>Email Address:</Label>
-          <Input
+      <FormWrapper>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <label>Email Address:</label>
+          <input
             type="email"
             name="email"
             value={this.state.email}
             placeholder="Please enter your email"
             onChange={this.handleChange.bind(this)}
           />
-          <Label>Password:</Label>
-          <Input
+          <label>Password:</label>
+          <input
             type="password"
             name="password"
             value={this.state.password}
             placeholder="Please enter your password"
             onChange={this.handleChange.bind(this)}
           />
-          <Button type="submit">Login</Button>
-        </form>
-      </Form>
+          <button type="submit">Login</button>
+        </Form>
+      </FormWrapper>
     )
   }
 }
