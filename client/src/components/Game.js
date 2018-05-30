@@ -93,7 +93,11 @@ class Game extends PureComponent {
       <GamesWrapper>
         <h1>GAME BOARD</h1>
         <Button onClick={createGame}>Create Game</Button>
-        <GamesList>{games.map(game => this.renderGame(game))}</GamesList>
+        <GamesList>
+          {games.map(
+            game => (game.status !== 'finished' ? this.renderGame(game) : null)
+          )}
+        </GamesList>
       </GamesWrapper>
     )
   }
