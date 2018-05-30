@@ -17,6 +17,9 @@ export interface Movie {
 
 export type Symbol = 'x' | 'o'
 export type Guesses = string[]
+export interface Guess {
+  guess: string
+}
 
 // export type Key = {
 //   [label: string]: boolean
@@ -35,32 +38,32 @@ const defaultMovie: Movie = {
 }
 
 const defaultKeyboard = {
-  a: false,
-  b: false,
-  c: false,
-  d: false,
-  e: false,
-  f: false,
-  g: false,
-  h: false,
-  i: false,
-  j: false,
-  k: false,
-  l: false,
-  m: false,
-  n: false,
-  o: false,
-  p: false,
-  q: false,
-  r: false,
-  s: false,
-  t: false,
-  u: false,
-  v: false,
-  w: false,
-  x: false,
-  y: false,
-  z: false
+  a: 'false',
+  b: 'false',
+  c: 'false',
+  d: 'false',
+  e: 'false',
+  f: 'false',
+  g: 'false',
+  h: 'false',
+  i: 'false',
+  j: 'false',
+  k: 'false',
+  l: 'false',
+  m: 'false',
+  n: 'false',
+  o: 'false',
+  p: 'false',
+  q: 'false',
+  r: 'false',
+  s: 'false',
+  t: 'false',
+  u: 'false',
+  v: 'false',
+  w: 'false',
+  x: 'false',
+  y: 'false',
+  z: 'false'
 }
 
 const defaultGuesses = []

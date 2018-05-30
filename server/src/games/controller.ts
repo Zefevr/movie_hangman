@@ -13,7 +13,7 @@ import {
   ForbiddenError
 } from 'routing-controllers'
 import User from '../users/entity'
-import { Game, Player } from './entities'
+import { Game, Player, Guess } from './entities'
 import { io } from '../index'
 import { showGuess, isWinner } from './logic'
 
@@ -37,15 +37,13 @@ export default class GameController {
 
     const displayTitle = showGuess(game.movie.title, game.guesses)
 
+    const displayGame = { ...game, movie: displayTitle }
+
     io.emit('action', {
       type: 'ADD_GAME',
-      payload: {
-        title: displayTitle,
-        guesses: game.guesses
-      }
+      payload: displayGame
     })
 
-    const displayGame = { ...game, movie: displayTitle }
     return displayGame
   }
 
@@ -115,7 +113,7 @@ export default class GameController {
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
-    @Body() guess: string
+    @Body() guess: Guess
   ) {
     const game = await Game.findOne(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
@@ -131,7 +129,7 @@ export default class GameController {
     //   throw new BadRequestError(`Invalid move`)
     // }
 
-    const winner = isWinner(game.movie.title, [...game.guesses, guess])
+    const winner = isWinner(game.movie.title, [...game.guesses, guess.guess])
 
     if (winner) {
       game.winner = player.symbol
@@ -143,7 +141,12 @@ export default class GameController {
     else {
       game.turn = player.symbol === 'x' ? 'o' : 'x'
     }
-    game.guesses.push(guess)
+
+    console.log(
+      `Guess: ${guess.guess}, Keyboard: ${game.keyboard[guess.guess]}`
+    )
+    game.keyboard[guess.guess] = 'true'
+    game.guesses.push(guess.guess)
     await game.save()
 
     const updatedGame = await Game.findOne(game.id)

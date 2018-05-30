@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { getGames, joinGame } from '../actions/games'
+import { getGames, joinGame, updateGame } from '../actions/games'
 import { getUsers } from '../actions/users'
 import { userId } from '../jwt'
 import styled from 'styled-components'
@@ -61,9 +61,19 @@ class GameBoard extends PureComponent {
     }
   }
 
-  handleGuess() {
-    console.log('clicked')
-    // DO SOMETHING
+  // handleGuess(event) {
+  //   this.props.updateGame(this.props.game.id, event.target.value)
+  // }
+
+  findWinner() {
+    const result = this.props.game.players
+      .filter(player => {
+        return player.symbol === this.props.game.winner
+      })
+      .map(player => {
+        return player.user.firstName
+      })
+    console.log(`Result: ${result}`)
   }
 
   renderKeyboard(keyboard) {
@@ -71,12 +81,13 @@ class GameBoard extends PureComponent {
     console.log(keyboard)
     console.log(keysArray)
     return keysArray.map(key => {
-      if (keyboard[key] === false) {
+      if (keyboard[key] === 'false') {
         return (
           <div
             key={key}
+            value={key}
             className="guess"
-            onClick={this.handleGuess.bind(this)}>
+            onClick={() => this.props.updateGame(this.props.game.id, key)}>
             {key}
           </div>
         )
@@ -100,11 +111,11 @@ class GameBoard extends PureComponent {
     if (game === null || users === null) return 'Loading...'
     if (!game) return 'Not found'
 
-    const player = game.players.find(p => p.userId === userId)
+    const player = game.players.find(p => p.user.id === userId)
 
     const winner = game.players
       .filter(p => p.symbol === game.winner)
-      .map(p => p.userId)[0]
+      .map(p => p.user.id)[0]
 
     return (
       <GameCard className="outer-paper">
@@ -146,6 +157,9 @@ const mapStateToProps = (state, props) => ({
   users: state.users
 })
 
-export default connect(mapStateToProps, { getGames, getUsers, joinGame })(
-  GameBoard
-)
+export default connect(mapStateToProps, {
+  getGames,
+  getUsers,
+  joinGame,
+  updateGame
+})(GameBoard)

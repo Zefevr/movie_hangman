@@ -1,7 +1,7 @@
 export const showGuess = (word: string, guesses: string[]): string => {
   return word
     .split('')
-    .map(letter => (guesses.indexOf(letter) < 0 ? '_' : letter))
+    .map(letter => (guesses.indexOf(letter.toLowerCase()) < 0 ? '_' : letter))
     .join(' ')
 }
 
