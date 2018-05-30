@@ -1,4 +1,4 @@
-import { UPDATE_GAMES, ADD_GAME } from '../actions/games'
+import { UPDATE_GAMES, UPDATE_GAME, ADD_GAME } from '../actions/games'
 
 export default (state = null, { type, payload }) => {
   switch (type) {
@@ -7,6 +7,8 @@ export default (state = null, { type, payload }) => {
         games[game.id] = game
         return games
       }, {})
+    case UPDATE_GAME:
+      return { ...state, [payload.id]: payload }
     case ADD_GAME:
       return { ...state, [payload.id]: payload }
     default:

@@ -5,7 +5,7 @@ import currentUserReducer from './reducers/currentUserReducer'
 import gamesReducer from './reducers/gamesReducer'
 import usersReducer from './reducers/usersReducer'
 
-// const socket = io.connect('http://localhost:3002')
+const socket = io.connect('http://localhost:4000')
 
 const rootReducer = combineReducers({
   currentUser: currentUserReducer,
@@ -13,7 +13,7 @@ const rootReducer = combineReducers({
   users: usersReducer
 })
 
-// socket.on('action', payload => store.dispatch(payload))
+socket.on('action', payload => store.dispatch(payload))
 
 const devTools = window.devToolsExtension ? window.devToolsExtension() : f => f
 const enhancer = compose(applyMiddleware(ReduxThunk), devTools)

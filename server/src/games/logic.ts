@@ -13,7 +13,7 @@ export const wrongGuessLimit = (word, guesses) => {
   return guesses.filter(guess => word.indexOf(guess) < 0).length >= 6
 }
 
-export const isWinner = (word, guesses) => {
+export const isWinner = (word: string, guesses: string[]): boolean => {
   return showGuess(word, guesses) === word.split('').join(' ')
 }
 

@@ -6,12 +6,16 @@ import {
   Param,
   BadRequestError,
   HttpCode,
-  Get
+  Get,
+  Patch,
+  Body,
+  NotFoundError,
+  ForbiddenError
 } from 'routing-controllers'
 import User from '../users/entity'
 import { Game, Player } from './entities'
 import { io } from '../index'
-import { showGuess } from './logic'
+import { showGuess, isWinner } from './logic'
 
 @JsonController()
 export default class GameController {
@@ -63,9 +67,17 @@ export default class GameController {
       symbol: 'o'
     }).save()
 
+    const updatedGame = await Game.findOne(game.id)
+
+    if (!updatedGame) throw new BadRequestError(`Game does not exist`)
+
+    const displayTitle = showGuess(updatedGame.movie.title, updatedGame.guesses)
+
+    const displayGame = { ...updatedGame, movie: displayTitle }
+
     io.emit('action', {
       type: 'UPDATE_GAME',
-      payload: await Game.findOne(game.id)
+      payload: displayGame
     })
 
     return player
@@ -73,8 +85,16 @@ export default class GameController {
 
   @Authorized()
   @Get('/games/:id([0-9]+)')
-  getGame(@Param('id') id: number) {
-    return Game.findOne(id)
+  async getGame(@Param('id') id: number) {
+    const updatedGame = await Game.findOne(id)
+
+    if (!updatedGame) throw new BadRequestError(`Game does not exist`)
+
+    const displayTitle = showGuess(updatedGame.movie.title, updatedGame.guesses)
+
+    const displayGame = { ...updatedGame, movie: displayTitle }
+
+    return displayGame
   }
 
   @Authorized()
@@ -85,5 +105,60 @@ export default class GameController {
       return { ...game, movie: showGuess(game.movie.title, game.guesses) }
     })
     return allGames
+  }
+
+  @Authorized()
+  // the reason that we're using patch here is because this request is not idempotent
+  // http://restcookbook.com/HTTP%20Methods/idempotency/
+  // try to fire the same requests twice, see what happens
+  @Patch('/games/:id([0-9]+)')
+  async updateGame(
+    @CurrentUser() user: User,
+    @Param('id') gameId: number,
+    @Body() guess: string
+  ) {
+    const game = await Game.findOne(gameId)
+    if (!game) throw new NotFoundError(`Game does not exist`)
+
+    const player = await Player.findOne({ user, game })
+
+    if (!player) throw new ForbiddenError(`You are not part of this game`)
+    if (game.status !== 'started')
+      throw new BadRequestError(`The game is not started yet`)
+    if (player.symbol !== game.turn)
+      throw new BadRequestError(`It's not your turn`)
+    // if (!isValidTransition(player.symbol, game.board, update.board)) {
+    //   throw new BadRequestError(`Invalid move`)
+    // }
+
+    const winner = isWinner(game.movie.title, [...game.guesses, guess])
+
+    if (winner) {
+      game.winner = player.symbol
+      game.status = 'finished'
+    }
+    // else if (finished(update.board)) {
+    //   game.status = 'finished'
+    // }
+    else {
+      game.turn = player.symbol === 'x' ? 'o' : 'x'
+    }
+    game.guesses.push(guess)
+    await game.save()
+
+    const updatedGame = await Game.findOne(game.id)
+
+    if (!updatedGame) throw new BadRequestError(`Game does not exist`)
+
+    const displayTitle = showGuess(updatedGame.movie.title, updatedGame.guesses)
+
+    const displayGame = { ...updatedGame, movie: displayTitle }
+
+    io.emit('action', {
+      type: 'UPDATE_GAME',
+      payload: displayGame
+    })
+
+    return displayGame
   }
 }
