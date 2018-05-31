@@ -35,7 +35,7 @@ export default () =>
     type: 'postgres',
     url:
       process.env.DATABASE_URL ||
-      'postgres://postgres:pgdev@localhost:5432/postgres',
+      'postgres://wiiflojplwcncs:2241a9be749acc2838356c6eba5400fbb1c896ea05f95b0c9328f00e403c18a4@ec2-54-235-206-118.compute-1.amazonaws.com:5432/dbirq5r0nojr1o',
     entities: [User, Game, Player],
     synchronize: true, // careful with this in production!
     logging: true,
