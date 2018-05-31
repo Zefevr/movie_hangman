@@ -4,10 +4,10 @@ import { BASE_URL } from '../constants'
 export const USER_SIGNUP_SUCCESS = 'USER_SIGNUP_SUCCESS'
 export const USER_SIGNUP_FAILED = 'USER_SIGNUP_FAILED'
 
-export const signup = (email, password) => (dispatch) =>
+export const signup = (firstName, lastName, email, password) => (dispatch) =>
 	request
 		.post(`${BASE_URL}/users`)
-		.send({ firstName: email, lastName: email, email, password })
+		.send({ firstName: firstName, lastName: lastName, email, password })
 		.then(result => {
 			dispatch({
 				type: USER_SIGNUP_SUCCESS

@@ -48,8 +48,8 @@ class SignUpForm extends PureComponent {
   handleSubmit = (event) => {
     event.preventDefault()
 
-    const { email, password } = this.state
-    this.props.postSignup(email, password)
+    const { firstName, lastName, email, password } = this.state
+    this.props.postSignup(firstName, lastName, email, password)
     // DO SOMETHING ELSE
   };
 
@@ -62,7 +62,21 @@ class SignUpForm extends PureComponent {
     return (
       <FormWrapper>
         <Form onSubmit={this.handleSubmit.bind(this)}>
-          <label>Email Address:</label>
+          <label>User Details:</label>
+          <input
+            type="firstName"
+            name="firstName"
+            value={this.state.firstName || ''}
+            placeholder="Please enter your name"
+            onChange={this.handleChange.bind(this)}
+          />
+          <input
+            type="lastName"
+            name="lastName"
+            value={this.state.lastName || ''}
+            placeholder="Please enter your last name"
+            onChange={this.handleChange.bind(this)}
+          />
           <input
             type="email"
             name="email"
