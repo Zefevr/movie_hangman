@@ -27,12 +27,11 @@ export const wrongGuessLimit = (word, guesses) => {
 
 export const isWinner = (word: string, guesses: string[]): boolean => {
   return (
-    showGuess(word, guesses) ===
     word
-      .split(' ')
-      .join('/')
+      .toLowerCase()
       .split('')
-      .join(' ')
+      .filter(char => char.match(/[a-z0-9]+/g))
+      .join('') === guesses.join('')
   )
 }
 

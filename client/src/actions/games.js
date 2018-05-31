@@ -66,10 +66,18 @@ export const updateGame = (gameId, guess) => (dispatch, getState) => {
   const state = getState()
   const jwt = state.currentUser.jwt
 
+  const formatGuess = guess
+    .toLowerCase()
+    .split('')
+    .filter(char => char.match(/[a-z0-9]+/g))
+    .join('')
+
+  console.log(formatGuess)
+
   request
     .patch(`${BASE_URL}/games/${gameId}`)
     .set('Authorization', `Bearer ${jwt}`)
-    .send({ guess })
+    .send({ guess: formatGuess })
     .then(_ => dispatch(updateGameSuccess()))
-    .catch(err => console.error(err))
+    .catch(err => console.error(err.message))
 }

@@ -15,7 +15,7 @@ const Root = styled.div`
   height: 100vh;
   width: 100vw;
   display: grid;
-  grid-template-columns: 1fr 6fr 1fr;
+  grid-template-columns: 1fr 10fr 1fr;
   grid-template-rows: 60px 1fr;
   font-family: 'Space Mono', monospace;
 `
