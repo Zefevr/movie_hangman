@@ -10,20 +10,33 @@ import styled from 'styled-components'
 const GameCard = styled.div`
   display: flex;
   flex-direction: column;
-  /* width: 250px; */
   justify-content: center;
   align-items: center;
   padding: 1rem;
   margin: 1rem;
-  /* border: 1px solid #98dbc6; */
-  > button {
+`
+
+const Form = styled.form`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+    > input {
+    /* width: 80%; */
     padding: 1rem;
-    margin-top: 1rem;
-    color: #336b87;
-    background-color: #98dbc6;
-    font-weight: strong;
-    font-size: 1rem;
+    margin: 1rem;
     border: 1px solid #5bc8ac;
+  }
+}
+`
+
+const StatusBox = styled.div`
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  > h1 {
+    border: 1px dashed green;
   }
 `
 
@@ -38,20 +51,54 @@ const KeyboardWrapper = styled.div`
     padding: 0.5rem 1rem;
     margin: 0.5rem;
     color: #336b87;
-    border: 1px solid #5bc8ac;
+    background-color: #98dbc6;
+    font-weight: strong;
     font-size: 1rem;
+    border: 1px solid #5bc8ac;
   }
   .noGuess {
     padding: 0.5rem 1rem;
     margin: 0.5rem;
     color: #336b87;
-    background-color: grey;
     border: 1px solid #5bc8ac;
     font-size: 1rem;
   }
 `
 
+const AlertWrapper = styled.div`
+  display: flex;
+  height: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  margin: 1rem;
+  > button {
+    padding: 1rem;
+    margin-top: 1rem;
+    color: #336b87;
+    background-color: #98dbc6;
+    font-weight: strong;
+    font-size: 1rem;
+    border: 1px solid #5bc8ac;
+  }
+`
+
+// const Input = styled.input`
+//   /* width: 100%; */
+//   padding: 1rem;
+//   margin: 1rem;
+//   border: 1px solid #5bc8ac;
+// `
+
 class GameBoard extends PureComponent {
+  constructor(props) {
+    super(props)
+    this.state = {
+      guess: ''
+    }
+  }
+
   static propTypes = {}
 
   componentWillMount() {
@@ -61,9 +108,15 @@ class GameBoard extends PureComponent {
     }
   }
 
-  // handleGuess(event) {
-  //   this.props.updateGame(this.props.game.id, event.target.value)
-  // }
+  handleChange(event) {
+    this.setState({ [event.target.name]: event.target.value })
+  }
+
+  handleSubmit(event) {
+    event.preventDefault()
+    this.props.updateGame(this.props.game.id, this.state.guess)
+    this.setState({ guess: '' })
+  }
 
   findWinner() {
     const result = this.props.game.players
@@ -78,8 +131,6 @@ class GameBoard extends PureComponent {
 
   renderKeyboard(keyboard) {
     let keysArray = Object.keys(keyboard)
-    console.log(keyboard)
-    console.log(keysArray)
     return keysArray.map(key => {
       if (keyboard[key] === 'false') {
         return (
@@ -118,32 +169,37 @@ class GameBoard extends PureComponent {
       .map(p => p.user.id)[0]
 
     return (
-      <GameCard className="outer-paper">
-        <h1>Game #{game.id}</h1>
+      <GameCard>
+        <StatusBox>
+          <h2>Game#{game.id}</h2>
+          <p>Status: {game.status}</p>
+          <p>Points: {game.score}</p>
+        </StatusBox>
 
-        <p>Status: {game.status}</p>
+        <h3>{game.movie}</h3>
 
-        <h1>{game.movie}</h1>
-
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <input
+            type="text"
+            name="guess"
+            placeholder="guess movie..."
+            value={this.state.guess}
+            onChange={this.handleChange.bind(this)}
+          />
+        </Form>
         <KeyboardWrapper>{this.renderKeyboard(game.keyboard)}</KeyboardWrapper>
+        <AlertWrapper className="status">
+          {game.status === 'started' &&
+            player &&
+            player.symbol === game.turn && <div>It's your turn!</div>}
 
-        {game.status === 'started' &&
-          player &&
-          player.symbol === game.turn && <div>It's your turn!</div>}
+          {game.status === 'pending' &&
+            game.players.map(p => p.user.id).indexOf(userId) === -1 && (
+              <button onClick={this.joinGame}>Join Game</button>
+            )}
 
-        {game.status === 'pending' &&
-          game.players.map(p => p.userId).indexOf(userId) === -1 && (
-            <button onClick={this.joinGame}>Join Game</button>
-          )}
-
-        {winner && <p>Winner: {users[winner].firstName}</p>}
-
-        <hr />
-
-        {/* {
-        game.status !== 'pending' &&
-        <Board board={game.board} makeMove={this.makeMove} />
-      } */}
+          {winner && <p>Winner: {users[winner].firstName}</p>}
+        </AlertWrapper>
       </GameCard>
     )
   }

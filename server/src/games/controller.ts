@@ -39,7 +39,10 @@ export default class GameController {
 
     const entity = await Game.create({
       movie: {
-        title: movie.title,
+        title: movie.title
+          .split('')
+          .filter(char => char.match(/[ A-Za-z0-9]+/g))
+          .join(''),
         overview: movie.overview,
         releaseDate: movie.release_date
       },
@@ -127,15 +130,14 @@ export default class GameController {
   }
 
   @Authorized()
-  // the reason that we're using patch here is because this request is not idempotent
-  // http://restcookbook.com/HTTP%20Methods/idempotency/
-  // try to fire the same requests twice, see what happens
   @Patch('/games/:id([0-9]+)')
   async updateGame(
     @CurrentUser() user: User,
     @Param('id') gameId: number,
     @Body() guess: Guess
   ) {
+    console.log(`Game ID: ${gameId}, Guess: ${guess.guess}`)
+
     const game = await Game.findOne(gameId)
     if (!game) throw new NotFoundError(`Game does not exist`)
 
@@ -146,16 +148,10 @@ export default class GameController {
       throw new BadRequestError(`The game is not started yet`)
     if (player.symbol !== game.turn)
       throw new BadRequestError(`It's not your turn`)
-    // if (!isValidTransition(player.symbol, game.board, update.board)) {
-    //   throw new BadRequestError(`Invalid move`)
-    // }
 
     if (guess.guess.length > 1) {
       // CHECK FULL TITLE GUESSES
-      const winner = isWinner(game.movie.title, [
-        ...game.guesses,
-        ...guess.guess.split('').filter(char => char !== ' ')
-      ])
+      const winner = isWinner(game.movie.title, guess.guess.split(''))
 
       if (winner) {
         game.winner = player.symbol
