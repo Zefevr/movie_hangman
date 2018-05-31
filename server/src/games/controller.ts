@@ -20,7 +20,7 @@ import * as request from 'superagent'
 
 const API_KEY = 'd418c8074050f491e00190c7484b0a19'
 const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=`
-
+const BASE_URL_IMAGES = 'https://image.tmdb.org/t/p/w342'
 //api.themoviedb.org/3/discover/movie?api_key=d418c8074050f491e00190c7484b0a19&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&year=1958
 
 @JsonController()
@@ -44,7 +44,8 @@ export default class GameController {
           .filter(char => char.match(/[ A-Za-z0-9]+/g))
           .join(''),
         overview: movie.overview,
-        releaseDate: movie.release_date
+        releaseDate: movie.release_date,
+        poster: `${BASE_URL_IMAGES}${movie.poster_path}`
       },
       score: movie.title.length * 500
     }).save()
@@ -177,10 +178,10 @@ export default class GameController {
 
       io.emit('action', {
         type: 'UPDATE_GAME',
-        payload: displayGame
+        payload: updatedGame.winner === null ? displayGame : updatedGame
       })
 
-      return displayGame
+      return updatedGame.winner === null ? displayGame : updatedGame
     } else {
       // CHECK LETTER GUESSES
 
@@ -215,10 +216,10 @@ export default class GameController {
 
       io.emit('action', {
         type: 'UPDATE_GAME',
-        payload: displayGame
+        payload: updatedGame.winner === null ? displayGame : updatedGame
       })
 
-      return displayGame
+      return updatedGame.winner === null ? displayGame : updatedGame
     }
   }
 }
