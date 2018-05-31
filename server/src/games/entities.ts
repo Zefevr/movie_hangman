@@ -66,7 +66,7 @@ const defaultKeyboard = {
   z: 'false'
 }
 
-const defaultGuesses = []
+const defaultGuesses = ['/']
 
 @Entity()
 export class Game extends BaseEntity {
@@ -78,8 +78,7 @@ export class Game extends BaseEntity {
   @Column('json', { default: defaultGuesses, nullable: true })
   guesses: Guesses
 
-  @Column('integer')
-  score: number
+  @Column('integer') score: number
 
   @Column('json', { default: defaultKeyboard })
   keyboard: any

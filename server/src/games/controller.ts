@@ -15,7 +15,13 @@ import {
 import User from '../users/entity'
 import { Game, Player, Guess } from './entities'
 import { io } from '../index'
-import { showGuess, isWinner } from './logic'
+import { showGuess, isWinner, wrongGuess } from './logic'
+import * as request from 'superagent'
+
+const API_KEY = 'd418c8074050f491e00190c7484b0a19'
+const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=`
+
+//api.themoviedb.org/3/discover/movie?api_key=d418c8074050f491e00190c7484b0a19&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&year=1958
 
 @JsonController()
 export default class GameController {
@@ -23,7 +29,22 @@ export default class GameController {
   @Post('/games')
   @HttpCode(201)
   async createGame(@CurrentUser() user: User) {
-    const entity = await Game.create().save()
+    const page = Math.floor(Math.random() * 5) + 1
+    const year = 1950 + Math.floor(Math.random() * 68)
+    const movie = await request
+      .get(`${BASE_URL}${page}&year=${year}`)
+      .then(result => {
+        return result.body.results[Math.floor(Math.random() * 21)]
+      })
+
+    const entity = await Game.create({
+      movie: {
+        title: movie.title,
+        overview: movie.overview,
+        releaseDate: movie.release_date
+      },
+      score: movie.title.length * 500
+    }).save()
 
     await Player.create({
       game: entity,
@@ -129,39 +150,79 @@ export default class GameController {
     //   throw new BadRequestError(`Invalid move`)
     // }
 
-    const winner = isWinner(game.movie.title, [...game.guesses, guess.guess])
+    if (guess.guess.length > 1) {
+      // CHECK FULL TITLE GUESSES
+      const winner = isWinner(game.movie.title, [
+        ...game.guesses,
+        ...guess.guess.split('').filter(char => char !== ' ')
+      ])
 
-    if (winner) {
-      game.winner = player.symbol
-      game.status = 'finished'
+      if (winner) {
+        game.winner = player.symbol
+        game.status = 'finished'
+      } else {
+        game.turn = player.symbol === 'x' ? 'o' : 'x'
+      }
+
+      game.score > 500 ? (game.score -= 500) : null
+
+      await game.save()
+
+      const updatedGame = await Game.findOne(game.id)
+
+      if (!updatedGame) throw new BadRequestError(`Game does not exist`)
+
+      const displayTitle = showGuess(
+        updatedGame.movie.title,
+        updatedGame.guesses
+      )
+
+      const displayGame = { ...updatedGame, movie: displayTitle }
+
+      io.emit('action', {
+        type: 'UPDATE_GAME',
+        payload: displayGame
+      })
+
+      return displayGame
+    } else {
+      // CHECK LETTER GUESSES
+
+      const winner = isWinner(game.movie.title, [...game.guesses, guess.guess])
+
+      if (winner) {
+        game.winner = player.symbol
+        game.status = 'finished'
+      } else {
+        game.turn = player.symbol === 'x' ? 'o' : 'x'
+      }
+
+      game.keyboard[guess.guess] = 'true'
+      game.guesses.push(guess.guess)
+
+      if (wrongGuess(game.movie.title, guess.guess)) {
+        game.score > 500 ? (game.score -= 500) : null
+      }
+
+      await game.save()
+
+      const updatedGame = await Game.findOne(game.id)
+
+      if (!updatedGame) throw new BadRequestError(`Game does not exist`)
+
+      const displayTitle = showGuess(
+        updatedGame.movie.title,
+        updatedGame.guesses
+      )
+
+      const displayGame = { ...updatedGame, movie: displayTitle }
+
+      io.emit('action', {
+        type: 'UPDATE_GAME',
+        payload: displayGame
+      })
+
+      return displayGame
     }
-    // else if (finished(update.board)) {
-    //   game.status = 'finished'
-    // }
-    else {
-      game.turn = player.symbol === 'x' ? 'o' : 'x'
-    }
-
-    console.log(
-      `Guess: ${guess.guess}, Keyboard: ${game.keyboard[guess.guess]}`
-    )
-    game.keyboard[guess.guess] = 'true'
-    game.guesses.push(guess.guess)
-    await game.save()
-
-    const updatedGame = await Game.findOne(game.id)
-
-    if (!updatedGame) throw new BadRequestError(`Game does not exist`)
-
-    const displayTitle = showGuess(updatedGame.movie.title, updatedGame.guesses)
-
-    const displayGame = { ...updatedGame, movie: displayTitle }
-
-    io.emit('action', {
-      type: 'UPDATE_GAME',
-      payload: displayGame
-    })
-
-    return displayGame
   }
 }
