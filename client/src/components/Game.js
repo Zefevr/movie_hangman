@@ -57,9 +57,7 @@ class Game extends PureComponent {
         <div className="content">
           <p>
             This game is being played by{' '}
-            {game.players
-              .map(player => users[player.user.id].firstName)
-              .join(' and ')}
+            {game.players.map(player => player.user.firstName).join(' and ')}
           </p>
           <h2>Game #{game.id}</h2>
           <p>Status: {game.status}</p>
