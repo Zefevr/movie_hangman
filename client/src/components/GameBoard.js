@@ -165,7 +165,7 @@ class GameBoard extends PureComponent {
         <StatusBox>
           <h2>Game#{game.id}</h2>
           <p>Status: {game.status}</p>
-          <p>Points: {game.score}</p>
+          <p className="animated fadeIn">Points: {game.score}</p>
         </StatusBox>
 
         <h3>{game.movie}</h3>
