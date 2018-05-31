@@ -78,6 +78,9 @@ export class Game extends BaseEntity {
   @Column('json', { default: defaultGuesses, nullable: true })
   guesses: Guesses
 
+  @Column('integer')
+  score: number
+
   @Column('json', { default: defaultKeyboard })
   keyboard: any
 
