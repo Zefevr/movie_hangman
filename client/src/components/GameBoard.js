@@ -161,31 +161,46 @@ class GameBoard extends PureComponent {
       .map(p => p.user.id)[0]
 
     return (
-      <GameCard>
-        <StatusBox>
-          <h2>Game#{game.id}</h2>
-          <p>Status: {game.status}</p>
-          <p>Points: {game.score}</p>
-        </StatusBox>
+      <div>
+        {!game.winner && (
+          <GameCard>
+            <StatusBox>
+              <h2>Game#{game.id}</h2>
+              <p>Status: {game.status}</p>
+              <p>Points: {game.score}</p>
+            </StatusBox>
 
-        <h3>{game.movie}</h3>
+            <h3>{game.movie}</h3>
 
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <input
-            type="text"
-            name="guess"
-            placeholder="guess movie..."
-            value={this.state.guess}
-            onChange={this.handleChange.bind(this)}
-          />
-        </Form>
-        <KeyboardWrapper>{this.renderKeyboard(game.keyboard)}</KeyboardWrapper>
+            <Form onSubmit={this.handleSubmit.bind(this)}>
+              <input
+                type="text"
+                name="guess"
+                placeholder="guess movie..."
+                value={this.state.guess}
+                onChange={this.handleChange.bind(this)}
+              />
+            </Form>
+            <KeyboardWrapper>
+              {this.renderKeyboard(game.keyboard)}
+            </KeyboardWrapper>
+          </GameCard>
+        )}
+        {game.winner && (
+          <GameCard>
+            <h3>
+              {game.movie.title} ({game.movie.releaseDate.slice(0, 4)})
+            </h3>
+            <img src={game.movie.poster} alt="" />
+            <p>{game.movie.overview}</p>
+          </GameCard>
+        )}
         <AlertWrapper className="status">
           {game.status === 'started' &&
             player &&
             player.symbol === game.turn && <div>It's your turn!</div>}
 
-            {game.status === 'started' &&
+          {game.status === 'started' &&
             player &&
             player.symbol !== game.turn && <div>Please wait for your turn</div>}
 
@@ -196,7 +211,7 @@ class GameBoard extends PureComponent {
 
           {winner && <p>Winner: {users[winner].firstName}</p>}
         </AlertWrapper>
-      </GameCard>
+      </div>
     )
   }
 }

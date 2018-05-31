@@ -13,6 +13,7 @@ export interface Movie {
   title: string
   overview: string
   releaseDate: string
+  poster: string
 }
 
 export type Symbol = 'x' | 'o'
@@ -21,20 +22,13 @@ export interface Guess {
   guess: string
 }
 
-// export type Key = {
-//   [label: string]: boolean
-// }
-
-// export interface Keyboard {
-//   Key
-// }
-
 type Status = 'pending' | 'started' | 'finished'
 
 const defaultMovie: Movie = {
   title: 'Titanic',
   overview: 'Leonardo DiCaprio dies',
-  releaseDate: '1997'
+  releaseDate: '1997',
+  poster: '/kHXEpyfl6zqn8a6YuozZUujufXf.jpg'
 }
 
 const defaultKeyboard = {
@@ -64,16 +58,16 @@ const defaultKeyboard = {
   x: 'false',
   y: 'false',
   z: 'false',
-  0: 'false',
-  1: 'false',
-  2: 'false',
-  3: 'false',
-  4: 'false',
-  5: 'false',
-  6: 'false',
-  7: 'false',
-  8: 'false',
-  9: 'false'
+  '0': 'false',
+  '1': 'false',
+  '2': 'false',
+  '3': 'false',
+  '4': 'false',
+  '5': 'false',
+  '6': 'false',
+  '7': 'false',
+  '8': 'false',
+  '9': 'false'
 }
 
 const defaultGuesses = ['/']
