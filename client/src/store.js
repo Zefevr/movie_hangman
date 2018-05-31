@@ -4,13 +4,15 @@ import io from 'socket.io-client'
 import currentUserReducer from './reducers/currentUserReducer'
 import gamesReducer from './reducers/gamesReducer'
 import usersReducer from './reducers/usersReducer'
+import signUpReducer from './reducers/signUpReducer'
 
 const socket = io.connect('http://localhost:4000')
 
 const rootReducer = combineReducers({
   currentUser: currentUserReducer,
   games: gamesReducer,
-  users: usersReducer
+  users: usersReducer,
+  signup: signUpReducer
 })
 
 socket.on('action', payload => store.dispatch(payload))
