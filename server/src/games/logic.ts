@@ -1,5 +1,7 @@
 export const showGuess = (word: string, guesses: string[]): string => {
   return word
+    .split(' ')
+    .join('/')
     .split('')
     .map(letter => (guesses.indexOf(letter.toLowerCase()) < 0 ? '_' : letter))
     .join(' ')
@@ -9,12 +11,29 @@ export const wrongGuessCount = (word, guesses) => {
   return guesses.filter(guess => word.indexOf(guess) < 0).length
 }
 
+export const wrongGuess = (word: string, guess: string): boolean => {
+  return (
+    word
+      .toLowerCase()
+      .split(' ')
+      .join('')
+      .indexOf(guess) === -1
+  )
+}
+
 export const wrongGuessLimit = (word, guesses) => {
   return guesses.filter(guess => word.indexOf(guess) < 0).length >= 6
 }
 
 export const isWinner = (word: string, guesses: string[]): boolean => {
-  return showGuess(word, guesses) === word.split('').join(' ')
+  return (
+    showGuess(word, guesses) ===
+    word
+      .split(' ')
+      .join('/')
+      .split('')
+      .join(' ')
+  )
 }
 
 export const gameFinished = (word, guesses) => {
