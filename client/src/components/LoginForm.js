@@ -82,7 +82,7 @@ class LoginForm extends PureComponent {
             onChange={this.handleChange.bind(this)}
           />
           <button type="submit">Login</button>
-          <p>If you dont have an account, please <Link to='/SignUpForm'>sign up</Link>!</p>
+          <p>If you don't have an account, please <Link to='/SignUpForm'>sign up</Link>!</p>
         </Form>
       </FormWrapper>
     )
