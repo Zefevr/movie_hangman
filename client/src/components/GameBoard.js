@@ -21,7 +21,6 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
     > input {
-    /* width: 80%; */
     padding: 1rem;
     margin: 1rem;
     border: 1px solid #5bc8ac;
@@ -83,13 +82,6 @@ const AlertWrapper = styled.div`
     border: 1px solid #5bc8ac;
   }
 `
-
-// const Input = styled.input`
-//   /* width: 100%; */
-//   padding: 1rem;
-//   margin: 1rem;
-//   border: 1px solid #5bc8ac;
-// `
 
 class GameBoard extends PureComponent {
   constructor(props) {
