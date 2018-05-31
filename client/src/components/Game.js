@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { getGames, createGame } from '../actions/games'
 import { getUsers } from '../actions/users'
 import styled from 'styled-components'
+import { userId } from '../jwt'
 
 const GamesWrapper = styled.div`
   display: flex;
@@ -48,7 +49,8 @@ class Game extends PureComponent {
   static propTypes = {}
 
   renderGame(game) {
-    const { users, history } = this.props
+    const { users, history, userId } = this.props
+    const gamePlayers = game.players.map(player => player.user.id)
 
     return (
       <GameCard key={game.id}>
@@ -66,7 +68,8 @@ class Game extends PureComponent {
           <Button
             size="small"
             onClick={() => history.push(`/games/${game.id}`)}>
-            Watch
+            {gamePlayers.includes(userId) && 'Start'}
+            {!gamePlayers.includes(userId) && 'Watch'}
           </Button>
         </div>
       </GameCard>
@@ -105,6 +108,7 @@ class Game extends PureComponent {
 
 const mapStateToProps = state => ({
   currentUser: state.currentUser,
+  userId: state.currentUser && userId(state.currentUser.jwt),
   users: state.users === null ? null : state.users,
   games:
     state.games === null
