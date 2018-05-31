@@ -185,6 +185,10 @@ class GameBoard extends PureComponent {
             player &&
             player.symbol === game.turn && <div>It's your turn!</div>}
 
+            {game.status === 'started' &&
+            player &&
+            player.symbol !== game.turn && <div>Please wait for your turn</div>}
+
           {game.status === 'pending' &&
             game.players.map(p => p.user.id).indexOf(userId) === -1 && (
               <button onClick={this.joinGame}>Join Game</button>
