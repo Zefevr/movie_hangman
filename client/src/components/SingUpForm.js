@@ -2,9 +2,8 @@ import React, { PureComponent } from 'react'
 //import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { login } from '../actions/login'
+import { signup } from '../actions/singup'
 import { Redirect } from 'react-router-dom'
-import {Link} from 'react-router-dom'
 
 const FormWrapper = styled.div`
   /* font-family: 'Merriweather', serif; */
@@ -36,31 +35,29 @@ const Form = styled.form`
   }
 `
 
-class LoginForm extends PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
-      email: '',
-      password: ''
-    }
-  }
+class SignUpForm extends PureComponent {
+    state = {}
+  
 
   //static propTypes = {}
 
-  handleChange(event) {
+  handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault()
 
     const { email, password } = this.state
-    this.props.login(email, password)
+    this.props.postSignup(email, password)
     // DO SOMETHING ELSE
-  }
+  };
 
   render() {
     if (this.props.currentUser) return <Redirect to="/game" />
+    if (this.props.signup.success) return (
+			<Redirect to="/" />
+		)
 
     return (
       <FormWrapper>
@@ -69,7 +66,7 @@ class LoginForm extends PureComponent {
           <input
             type="email"
             name="email"
-            value={this.state.email}
+            value={this.state.email || ''}
             placeholder="Please enter your email"
             onChange={this.handleChange.bind(this)}
           />
@@ -77,20 +74,35 @@ class LoginForm extends PureComponent {
           <input
             type="password"
             name="password"
-            value={this.state.password}
+            value={this.state.password || ''}
             placeholder="Please enter your password"
             onChange={this.handleChange.bind(this)}
           />
-          <button type="submit">Login</button>
-          <p>If you dont have an account, please <Link to='/SignUpForm'>sign up</Link>!</p>
+           <label>Confirm Password:</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            value={this.state.confirmPassword || ''}
+            placeholder="Please confirm password"
+            onChange={this.handleChange.bind(this)}
+          />
+          {
+            this.state.password &&
+            this.state.confirmPassword &&
+            this.state.password !== this.state.confirmPassword &&
+            <p style={{color:'red'}}>The passwords do not match!</p>
+          }
+          <button type="submit">Sign Up</button>
         </Form>
       </FormWrapper>
     )
   }
 }
 
-const mapStateToProps = ({ currentUser }) => {
-  return { currentUser }
+const mapStateToProps = function (state) {
+	return {
+		signup: state.signup
+	}
 }
 
-export default connect(mapStateToProps, { login })(LoginForm)
+export default connect(mapStateToProps, {postSignup: signup})(SignUpForm)

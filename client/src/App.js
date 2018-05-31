@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import LoginForm from './components/LoginForm'
+import SignUpForm from './components/SingUpForm'
 import Game from './components/Game'
 import GameBoard from './components/GameBoard'
 import {
@@ -63,6 +64,7 @@ class App extends Component {
           <AppWrapper className="App">
             <Route exact path="/" render={() => <Redirect to="/game" />} />
             <Route exact path="/login" component={LoginForm} />
+            <Route exact path='/SignUpForm' component={SignUpForm} />
             <Route exact path="/game" component={Game} />
             <Route exact path="/games/:id" component={GameBoard} />
           </AppWrapper>
