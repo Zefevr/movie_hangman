@@ -46,8 +46,7 @@ export default class GameController {
         overview: movie.overview,
         releaseDate: movie.release_date,
         poster: `${BASE_URL_IMAGES}${movie.poster_path}`
-      },
-      score: movie.title.length * 500
+      }
     }).save()
 
     await Player.create({
@@ -155,13 +154,23 @@ export default class GameController {
       const winner = isWinner(game.movie.title, guess.guess.split(''))
 
       if (winner) {
+        const user = await User.findOne(player.user.id)
+
+        if (!user) throw new NotFoundError(`User does not exist`)
         game.winner = player.symbol
         game.status = 'finished'
+        user.points += game.score
+        await user.save()
+
+        io.emit('action', {
+          type: 'UPDATE_USER',
+          payload: user
+        })
       } else {
         game.turn = player.symbol === 'x' ? 'o' : 'x'
       }
 
-      game.score > 500 ? (game.score -= 500) : null
+      game.score > 250 ? (game.score -= 250) : (game.score = 0)
 
       await game.save()
 
@@ -188,8 +197,18 @@ export default class GameController {
       const winner = isWinner(game.movie.title, [...game.guesses, guess.guess])
 
       if (winner) {
+        const user = await User.findOne(player.user.id)
+
+        if (!user) throw new NotFoundError(`User does not exist`)
         game.winner = player.symbol
         game.status = 'finished'
+        user.points += game.score
+        await user.save()
+
+        io.emit('action', {
+          type: 'UPDATE_USER',
+          payload: user
+        })
       } else {
         game.turn = player.symbol === 'x' ? 'o' : 'x'
       }
@@ -198,7 +217,7 @@ export default class GameController {
       game.guesses = [...game.guesses, guess.guess]
 
       if (wrongGuess(game.movie.title, guess.guess)) {
-        game.score > 500 ? (game.score -= 500) : null
+        game.score > 250 ? (game.score -= 250) : (game.score = 0)
       }
 
       await game.save()

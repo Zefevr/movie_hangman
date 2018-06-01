@@ -31,7 +31,7 @@ const defaultMovie: Movie = {
   poster: '/kHXEpyfl6zqn8a6YuozZUujufXf.jpg'
 }
 
-export const defaultKeyboard = {
+const defaultKeyboard = {
   a: 'false',
   b: 'false',
   c: 'false',
@@ -79,10 +79,11 @@ export class Game extends BaseEntity {
   @Column('json', { default: defaultMovie })
   movie: Movie
 
-  @Column('json', { default: defaultGuesses, nullable: true })
+  @Column('json', { default: defaultGuesses })
   guesses: Guesses
 
-  @Column('integer') score: number
+  @Column('integer', { default: 5000 })
+  score: number
 
   @Column('json', { default: defaultKeyboard })
   keyboard: any
