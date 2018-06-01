@@ -24,13 +24,6 @@ export interface Guess {
 
 type Status = 'pending' | 'started' | 'finished'
 
-const defaultMovie: Movie = {
-  title: 'Titanic',
-  overview: 'Leonardo DiCaprio dies',
-  releaseDate: '1997',
-  poster: '/kHXEpyfl6zqn8a6YuozZUujufXf.jpg'
-}
-
 const defaultKeyboard = {
   a: 'false',
   b: 'false',
@@ -76,8 +69,7 @@ const defaultGuesses = ['/']
 export class Game extends BaseEntity {
   @PrimaryGeneratedColumn() id?: number
 
-  @Column('json', { default: defaultMovie })
-  movie: Movie
+  @Column('json') movie: Movie
 
   @Column('json', { default: defaultGuesses })
   guesses: Guesses
@@ -97,8 +89,6 @@ export class Game extends BaseEntity {
   @Column('text', { default: 'pending' })
   status: Status
 
-  // this is a relation, read more about them here:
-  // http://typeorm.io/#/many-to-one-one-to-many-relations
   @OneToMany(_ => Player, player => player.game, { eager: true })
   players: Player[]
 }
@@ -113,8 +103,6 @@ export class Player extends BaseEntity {
 
   @ManyToOne(_ => Game, game => game.players)
   game: Game
-
-  // @Column() userId: number
 
   @Column('char', { length: 1 })
   symbol: Symbol

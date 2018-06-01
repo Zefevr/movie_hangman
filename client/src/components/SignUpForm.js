@@ -1,12 +1,10 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { signup } from '../actions/signup'
 import { register } from '../actions/signup'
 import { Redirect } from 'react-router-dom'
 
 const FormWrapper = styled.div`
-  /* font-family: 'Merriweather', serif; */
   padding: 1rem;
   display: flex;
   justify-content: center;
@@ -35,16 +33,12 @@ const Form = styled.form`
   }
 `
 class SignUpForm extends PureComponent {
-    state = {}
+  state = {}
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault()
 
-    if (
-      this.state.email &&
-      this.state.password &&
-      this.state.confirmPassword
-    ) {
+    if (this.state.email && this.state.password && this.state.confirmPassword) {
       this.props.register(
         this.state.firstName,
         this.state.lastName,
@@ -59,35 +53,29 @@ class SignUpForm extends PureComponent {
     const { name, value } = event.target
     event.target.setCustomValidity('')
     if (!event.target.validity.valid) {
-      event.target.setCustomValidity(
-        'Please enter your name'
-      )
+      event.target.setCustomValidity('Please enter your name')
     }
     this.setState({
       [name]: value
     })
   }
-  
+
   handleChangeLastName = event => {
     const { name, value } = event.target
     event.target.setCustomValidity('')
     if (!event.target.validity.valid) {
-      event.target.setCustomValidity(
-        'Please enter your Lastname'
-      )
+      event.target.setCustomValidity('Please enter your Lastname')
     }
     this.setState({
       [name]: value
     })
   }
-  
+
   handleChangeEmail = event => {
     const { name, value } = event.target
     event.target.setCustomValidity('')
     if (!event.target.validity.valid) {
-      event.target.setCustomValidity(
-        'Please enter a valid email address'
-      )
+      event.target.setCustomValidity('Please enter a valid email address')
     }
     this.setState({
       [name]: value
@@ -111,9 +99,7 @@ class SignUpForm extends PureComponent {
     const { name, value } = event.target
     event.target.setCustomValidity('')
     if (!event.target.validity.valid) {
-      event.target.setCustomValidity(
-        'Please confirm your password'
-      )
+      event.target.setCustomValidity('Please confirm your password')
     }
     this.setState({
       [name]: value
@@ -121,8 +107,8 @@ class SignUpForm extends PureComponent {
   }
 
   render() {
-   if (this.props.currentUser) return <Redirect to="/game" />
-   if (this.props.registerSuccess) return <Redirect to="/" />
+    // if (this.props.currentUser) return <Redirect to="/game" />
+    if (this.props.registerSuccess) return <Redirect to="/" />
 
     return (
       <FormWrapper>
@@ -163,7 +149,7 @@ class SignUpForm extends PureComponent {
             placeholder="Please enter your password"
             onChange={this.handleChangePassword.bind(this)}
           />
-           <label>Confirm Password:</label>
+          <label>Confirm Password:</label>
           <input
             type="password"
             name="confirmPassword"
@@ -172,12 +158,11 @@ class SignUpForm extends PureComponent {
             placeholder="Please confirm password"
             onChange={this.handleChangeConfirm.bind(this)}
           />
-          {
-            this.state.password &&
+          {this.state.password &&
             this.state.confirmPassword &&
-            this.state.password !== this.state.confirmPassword &&
-            <p style={{color:'red'}}>The passwords do not match!</p>
-          }
+            this.state.password !== this.state.confirmPassword && (
+              <p style={{ color: 'red' }}>The passwords do not match!</p>
+            )}
           <button type="submit">Sign Up</button>
         </Form>
       </FormWrapper>
@@ -185,11 +170,10 @@ class SignUpForm extends PureComponent {
   }
 }
 
-const mapStateToProps = function (state) {
-	return {
-    signup: state.signup,
+const mapStateToProps = function(state) {
+  return {
     registerSuccess: state.registerSuccess
-	}
+  }
 }
 
-export default connect(mapStateToProps, {register, postSignup: signup})(SignUpForm)
+export default connect(mapStateToProps, { register })(SignUpForm)

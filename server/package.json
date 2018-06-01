@@ -10,6 +10,7 @@
     "@types/koa-bodyparser": "^4.2.0",
     "@types/koa-multer": "^1.0.0",
     "@types/koa-router": "^7.0.28",
+    "@types/superagent": "^3.8.0",
     "bcrypt": "^2.0.1",
     "jsonwebtoken": "^8.2.1",
     "kcors": "^2.2.1",
