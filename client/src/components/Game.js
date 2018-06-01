@@ -12,8 +12,17 @@ const GamesWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  > h1 {
-    margin: 2rem 0 0 0;
+  > h2 {
+    margin: 1rem;
+    padding: 0.5rem;
+  }
+  > th,
+  td {
+    border: 1px solid #98dbc6;
+    width: 200px;
+    text-align: center;
+    color: #336b87;
+    /* background-color: #98dbc6; */
   }
 `
 
@@ -27,17 +36,32 @@ const GamesList = styled.div`
 const GameCard = styled.div`
   display: flex;
   flex-direction: column;
-  width: 250px;
-  justify-content: center;
-  align-items: center;
+  width: 200px;
+  height: 225px;
+  justify-content: space-between;
   padding: 1rem;
   margin: 1rem;
   border: 1px solid #98dbc6;
+  > h3 {
+    padding: 0;
+    margin: 0;
+  }
+  > p {
+    padding: 0;
+    margin: 0;
+  }
+  > .center {
+    padding: 0;
+    display: flex;
+    margin: 0;
+    align-items: center;
+    justify-content: center;
+  }
 `
 
 const Button = styled.button`
   padding: 1rem;
-  margin-top: 1rem;
+  margin: 1rem;
   color: #336b87;
   background-color: #98dbc6;
   font-weight: strong;
@@ -54,15 +78,19 @@ class Game extends PureComponent {
 
     return (
       <GameCard key={game.id}>
-        <div className="content">
-          <p>
-            This game is being played by{' '}
-            {game.players.map(player => player.user.firstName).join(' and ')}
-          </p>
-          <h2>Game #{game.id}</h2>
-          <p>Status: {game.status}</p>
+        <div className="center">
+          <h3>Game #{game.id}</h3>
         </div>
-        <div className="actions">
+        {game.players.map(player => player.user.firstName).length < 2 && (
+          <p>Waiting for players...</p>
+        )}
+        {game.players.map(player => player.user.firstName).length === 2 && (
+          <p>
+            {game.players.map(player => player.user.firstName).join(' vs. ')}
+          </p>
+        )}
+        <p>Status: {game.status}</p>
+        <div className="center">
           <Button
             size="small"
             onClick={() => history.push(`/games/${game.id}`)}>
@@ -75,12 +103,8 @@ class Game extends PureComponent {
   }
 
   componentWillMount() {
-    if (this.props.games === null) {
-      this.props.getGames()
-    }
-    if (this.props.users === null) {
-      this.props.getUsers()
-    }
+    this.props.getGames()
+    this.props.getUsers()
   }
 
   render() {
@@ -92,35 +116,33 @@ class Game extends PureComponent {
 
     return (
       <GamesWrapper>
-        <h2>LEADERBOARD</h2>
-        <div>
-          <table>
-            <tbody>
-              <tr>
-                <th>User</th>
-                <th>Points</th>
-              </tr>
-              {Object.values(users)
-                .sort((a, b) => b.points - a.points)
-                .slice(0, 5)
-                .map(user => {
-                  return (
-                    <tr key={user.id}>
-                      <td>{user.firstName}</td>
-                      <td>{user.points}</td>
-                    </tr>
-                  )
-                })}
-            </tbody>
-          </table>
-        </div>
-        <h2>GAME BOARD</h2>
-        <Button onClick={createGame}>Create Game</Button>
+        <h2>LEADERBOARD:</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th>User</th>
+              <th>Points</th>
+            </tr>
+            {Object.values(users)
+              .sort((a, b) => b.points - a.points)
+              .slice(0, 5)
+              .map(user => {
+                return (
+                  <tr key={user.id}>
+                    <td>{user.firstName}</td>
+                    <td>{user.points}</td>
+                  </tr>
+                )
+              })}
+          </tbody>
+        </table>
+        <h2>GAME BOARD:</h2>
         <GamesList>
           {games.map(
             game => (game.status !== 'finished' ? this.renderGame(game) : null)
           )}
         </GamesList>
+        <Button onClick={createGame}>Create Game</Button>
       </GamesWrapper>
     )
   }
