@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './App.css'
 import LoginForm from './components/LoginForm'
-import SignUpForm from './components/SingUpForm'
+import SignUpForm from './components/SignUpForm'
 import Game from './components/Game'
 import GameBoard from './components/GameBoard'
 import {

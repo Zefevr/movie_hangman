@@ -67,9 +67,9 @@ class LoginForm extends PureComponent {
   handleChangePassword = event => {
     const { name, value } = event.target
     event.target.setCustomValidity('')
-    if (!event.target.validity.valid) {
+    /* if (!event.target.validity.valid) {
       event.target.setCustomValidity()
-    }
+    } */
     this.setState({
       [name]: value
     })

@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { signup } from '../actions/singup'
+import { signup } from '../actions/signup'
+import { register } from '../actions/signup'
 import { Redirect } from 'react-router-dom'
 
 const FormWrapper = styled.div`
@@ -39,9 +40,19 @@ class SignUpForm extends PureComponent {
   handleSubmit = (event) => {
     event.preventDefault()
 
-    const { firstName, lastName, email, password } = this.state
-    this.props.postSignup(firstName, lastName, email, password)
-  
+    if (
+      this.state.email &&
+      this.state.password &&
+      this.state.confirmPassword
+    ) {
+      this.props.register(
+        this.state.firstName,
+        this.state.lastName,
+        this.state.email,
+        this.state.password,
+        this.state.confirmPassword
+      )
+    }
   }
 
   handleChangeName = event => {
@@ -110,10 +121,8 @@ class SignUpForm extends PureComponent {
   }
 
   render() {
-    if (this.props.currentUser) return <Redirect to="/game" />
-    if (this.props.signup.success) return (
-			<Redirect to="/" />
-		)
+   if (this.props.currentUser) return <Redirect to="/game" />
+   if (this.props.registerSuccess) return <Redirect to="/" />
 
     return (
       <FormWrapper>
@@ -139,6 +148,7 @@ class SignUpForm extends PureComponent {
             type="email"
             name="email"
             required="required"
+            pattern="(?!(^[.-].*|[^@]*[.-]@|.*\.{2,}.*)|^.{254}.)([a-zA-Z0-9!#$%&'*+\/=?^_`{|}~.-]+@)(?!-.*|.*-\.)([a-zA-Z0-9-]{1,63}\.)+[a-zA-Z]{2,15}"
             value={this.state.email || ''}
             placeholder="Please enter your email"
             onChange={this.handleChangeEmail.bind(this)}
@@ -177,8 +187,9 @@ class SignUpForm extends PureComponent {
 
 const mapStateToProps = function (state) {
 	return {
-		signup: state.signup
+    signup: state.signup,
+    registerSuccess: state.registerSuccess
 	}
 }
 
-export default connect(mapStateToProps, {postSignup: signup})(SignUpForm)
+export default connect(mapStateToProps, {register, postSignup: signup})(SignUpForm)
