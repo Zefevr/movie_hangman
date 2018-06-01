@@ -186,18 +186,18 @@ class GameBoard extends PureComponent {
         <AlertWrapper className="status">
           {game.status === 'started' &&
             player &&
-            player.symbol === game.turn && <div>It's your turn!</div>}
+            player.symbol === game.turn && <div><span style={{ color: 'green' }}>It's your turn!</span></div>}
 
           {game.status === 'started' &&
             player &&
-            player.symbol !== game.turn && <div>Please wait for your turn</div>}
+            player.symbol !== game.turn && <div><span style={{ color: 'red' }}>Please wait for your turn</span></div>}
 
           {game.status === 'pending' &&
             game.players.map(p => p.user.id).indexOf(userId) === -1 && (
               <button onClick={this.joinGame}>Join Game</button>
             )}
 
-          {winner && <p>Winner: {users[winner].firstName}</p>}
+          {winner && <p style={{ color: 'green' }}><strong>{users[winner].firstName} wins {game.score} points!</strong></p>}
         </AlertWrapper>
         {game.winner && (
           <GameCard>
