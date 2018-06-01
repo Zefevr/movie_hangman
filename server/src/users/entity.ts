@@ -24,6 +24,9 @@ export default class User extends BaseEntity {
   @Column('text')
   lastName: string
 
+  @Column('integer', { default: 0 })
+  points: number
+
   @IsEmail()
   @Column('text')
   email: string

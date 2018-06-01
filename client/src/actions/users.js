@@ -3,6 +3,7 @@ import { BASE_URL } from '../constants'
 
 export const UPDATE_USERS = 'UPDATE_USERS'
 export const ADD_USER = 'ADD_USER'
+export const UPDATE_USER = 'UPDATE_USER'
 
 export const getUsers = () => (dispatch, getState) => {
   const state = getState()

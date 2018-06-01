@@ -92,7 +92,29 @@ class Game extends PureComponent {
 
     return (
       <GamesWrapper>
-        <h1>GAME BOARD</h1>
+        <h2>LEADERBOARD</h2>
+        <div>
+          <table>
+            <tbody>
+              <tr>
+                <th>User</th>
+                <th>Points</th>
+              </tr>
+              {Object.values(users)
+                .sort((a, b) => b.points - a.points)
+                .slice(0, 5)
+                .map(user => {
+                  return (
+                    <tr key={user.id}>
+                      <td>{user.firstName}</td>
+                      <td>{user.points}</td>
+                    </tr>
+                  )
+                })}
+            </tbody>
+          </table>
+        </div>
+        <h2>GAME BOARD</h2>
         <Button onClick={createGame}>Create Game</Button>
         <GamesList>
           {games.map(
