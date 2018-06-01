@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Redirect } from 'react-router-dom'
 import { getGames, joinGame, updateGame } from '../actions/games'
@@ -89,7 +88,6 @@ class GameBoard extends PureComponent {
     }
   }
 
-  static propTypes = {}
 
   componentWillMount() {
     if (this.props.currentUser) {
@@ -145,7 +143,7 @@ class GameBoard extends PureComponent {
   joinGame = () => this.props.joinGame(this.props.game.id)
 
   render() {
-    const { game, users, authenticated, userId, currentUser } = this.props
+    const { game, users, userId, currentUser } = this.props
 
     if (!currentUser) return <Redirect to="/login" />
 
