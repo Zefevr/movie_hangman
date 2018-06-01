@@ -184,21 +184,46 @@ class GameBoard extends PureComponent {
             </KeyboardWrapper>
           </GameCard>
         )}
-        <AlertWrapper className="status">
+        <AlertWrapper>
           {game.status === 'started' &&
             player &&
-            player.symbol === game.turn && <div><span style={{ color: 'green' }}>It's your turn!</span></div>}
+            player.symbol === game.turn && (
+              <div>
+                <span style={{ color: '#5bc8ac' }}>It's your turn!</span>
+              </div>
+            )}
 
           {game.status === 'started' &&
             player &&
-            player.symbol !== game.turn && <div><span style={{ color: 'red' }}>Please wait for your turn</span></div>}
+            player.symbol !== game.turn && (
+              <div>
+                <span style={{ color: '#a43820' }}>
+                  Please wait for your turn...
+                </span>
+              </div>
+            )}
 
           {game.status === 'pending' &&
             game.players.map(p => p.user.id).indexOf(userId) === -1 && (
               <button onClick={this.joinGame}>Join Game</button>
             )}
 
-          {winner && <p style={{ color: 'green' }}><strong>{users[winner].firstName} wins {game.score} points!</strong></p>}
+          {game.status === 'pending' &&
+            game.players.map(p => p.user.id).indexOf(userId) === 0 && (
+              <div>
+                <span style={{ color: '#a43820' }}>
+                  Waiting for an opponent...
+                </span>
+              </div>
+            )}
+
+          {winner && (
+            <p style={{ color: '#5bc8ac' }}>
+              <strong>
+                {users[winner].firstName} wins {game.score} points!
+              </strong>
+            </p>
+          )}
         </AlertWrapper>
         {game.winner && (
           <GameCard>

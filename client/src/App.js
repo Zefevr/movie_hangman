@@ -44,7 +44,10 @@ const Header = styled.div`
   > img {
     height: 35px;
   }
-  > a {
+  > a,
+  a:hover,
+  a:active {
+    color: #336b87;
     text-decoration: none;
   }
 `
@@ -64,7 +67,7 @@ class App extends Component {
           <AppWrapper className="App">
             <Route exact path="/" render={() => <Redirect to="/game" />} />
             <Route exact path="/login" component={LoginForm} />
-            <Route exact path='/SignUpForm' component={SignUpForm} />
+            <Route exact path="/SignUpForm" component={SignUpForm} />
             <Route exact path="/game" component={Game} />
             <Route exact path="/games/:id" component={GameBoard} />
           </AppWrapper>
