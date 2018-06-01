@@ -54,9 +54,10 @@ const KeyboardWrapper = styled.div`
   }
   .noGuess {
     padding: 0.5rem 1rem;
-    margin: 0.5rem;
+    margin: 0.25rem;
     color: #336b87;
     border: 1px solid #5bc8ac;
+    font-weight: strong;
     font-size: 1rem;
   }
 `
