@@ -20,7 +20,7 @@ import * as request from 'superagent'
 
 const API_KEY = 'd418c8074050f491e00190c7484b0a19'
 const BASE_URL = `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=`
-const BASE_URL_IMAGES = 'https://image.tmdb.org/t/p/w342'
+const BASE_URL_IMAGES = 'https://image.tmdb.org/t/p/w185'
 //api.themoviedb.org/3/discover/movie?api_key=d418c8074050f491e00190c7484b0a19&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&year=1958
 
 @JsonController()

@@ -22,7 +22,6 @@ const GamesWrapper = styled.div`
     width: 200px;
     text-align: center;
     color: #336b87;
-    /* background-color: #98dbc6; */
   }
 `
 

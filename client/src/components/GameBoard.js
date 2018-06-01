@@ -10,10 +10,11 @@ import styled from 'styled-components'
 const GameCard = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  padding: 1rem;
-  margin: 1rem;
+  > h3 {
+    padding: 1rem;
+    margin: 0;
+  }
 `
 
 const Form = styled.form`
@@ -34,9 +35,6 @@ const StatusBox = styled.div`
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  > h1 {
-    border: 1px dashed green;
-  }
 `
 
 const KeyboardWrapper = styled.div`
@@ -45,10 +43,9 @@ const KeyboardWrapper = styled.div`
   justify-content: center;
   align-items: center;
   padding: 1rem;
-  margin: 1rem;
   .guess {
     padding: 0.5rem 1rem;
-    margin: 0.5rem;
+    margin: 0.25rem;
     color: #336b87;
     background-color: #98dbc6;
     font-weight: strong;
@@ -165,7 +162,7 @@ class GameBoard extends PureComponent {
         {!game.winner && (
           <GameCard>
             <StatusBox>
-              <h2>Game#{game.id}</h2>
+              <h3>Game#{game.id}</h3>
               <p>Status: {game.status}</p>
               <p>Points: {game.score}</p>
             </StatusBox>
@@ -186,15 +183,6 @@ class GameBoard extends PureComponent {
             </KeyboardWrapper>
           </GameCard>
         )}
-        {game.winner && (
-          <GameCard>
-            <h3>
-              {game.movie.title} ({game.movie.releaseDate.slice(0, 4)})
-            </h3>
-            <img src={game.movie.poster} alt="" />
-            <p>{game.movie.overview}</p>
-          </GameCard>
-        )}
         <AlertWrapper className="status">
           {game.status === 'started' &&
             player &&
@@ -211,6 +199,17 @@ class GameBoard extends PureComponent {
 
           {winner && <p>Winner: {users[winner].firstName}</p>}
         </AlertWrapper>
+        {game.winner && (
+          <GameCard>
+            <p>
+              <strong>
+                {game.movie.title} ({game.movie.releaseDate.slice(0, 4)})
+              </strong>
+            </p>
+            <img src={game.movie.poster} alt="" />
+            <p>{game.movie.overview}</p>
+          </GameCard>
+        )}
       </div>
     )
   }
