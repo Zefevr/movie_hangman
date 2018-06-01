@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-//import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { login } from '../actions/login'
@@ -45,18 +44,35 @@ class LoginForm extends PureComponent {
     }
   }
 
-  //static propTypes = {}
-
-  handleChange(event) {
-    this.setState({ [event.target.name]: event.target.value })
-  }
-
   handleSubmit(event) {
     event.preventDefault()
 
     const { email, password } = this.state
     this.props.login(email, password)
-    // DO SOMETHING ELSE
+  }
+
+  handleChangeEmail = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity(
+        'Please enter a valid email address'
+      )
+    }
+    this.setState({
+      [name]: value
+    })
+  }
+
+  handleChangePassword = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity()
+    }
+    this.setState({
+      [name]: value
+    })
   }
 
   render() {
@@ -69,20 +85,22 @@ class LoginForm extends PureComponent {
           <input
             type="email"
             name="email"
+            required="required"
             value={this.state.email}
             placeholder="Please enter your email"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangeEmail.bind(this)}
           />
           <label>Password:</label>
           <input
             type="password"
             name="password"
+            required="required"
             value={this.state.password}
             placeholder="Please enter your password"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangePassword.bind(this)}
           />
           <button type="submit">Login</button>
-          <p>If you don't have an account, please <Link to='/SignUpForm'>sign up</Link>!</p>
+          <p>If you don't have an account, please <Link to='/SignUpForm'>Sign up</Link>!</p>
         </Form>
       </FormWrapper>
     )

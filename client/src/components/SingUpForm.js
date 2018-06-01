@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-//import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { signup } from '../actions/singup'
@@ -34,24 +33,81 @@ const Form = styled.form`
     border: 1px solid #5bc8ac;
   }
 `
-
 class SignUpForm extends PureComponent {
     state = {}
-  
-
-  //static propTypes = {}
-
-  handleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value })
-  }
 
   handleSubmit = (event) => {
     event.preventDefault()
 
     const { firstName, lastName, email, password } = this.state
     this.props.postSignup(firstName, lastName, email, password)
-    // DO SOMETHING ELSE
-  };
+  
+  }
+
+  handleChangeName = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity(
+        'Please enter your name'
+      )
+    }
+    this.setState({
+      [name]: value
+    })
+  }
+  
+  handleChangeLastName = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity(
+        'Please enter your Lastname'
+      )
+    }
+    this.setState({
+      [name]: value
+    })
+  }
+  
+  handleChangeEmail = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity(
+        'Please enter a valid email address'
+      )
+    }
+    this.setState({
+      [name]: value
+    })
+  }
+
+  handleChangePassword = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity(
+        'Password must be at least 8 characters long, with at least one letter and one number'
+      )
+    }
+    this.setState({
+      [name]: value
+    })
+  }
+
+  handleChangeConfirm = event => {
+    const { name, value } = event.target
+    event.target.setCustomValidity('')
+    if (!event.target.validity.valid) {
+      event.target.setCustomValidity(
+        'Please confirm your password'
+      )
+    }
+    this.setState({
+      [name]: value
+    })
+  }
 
   render() {
     if (this.props.currentUser) return <Redirect to="/game" />
@@ -66,39 +122,45 @@ class SignUpForm extends PureComponent {
           <input
             type="firstName"
             name="firstName"
+            required="required"
             value={this.state.firstName || ''}
             placeholder="Please enter your name"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangeName.bind(this)}
           />
           <input
             type="lastName"
             name="lastName"
+            required="required"
             value={this.state.lastName || ''}
             placeholder="Please enter your last name"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangeLastName.bind(this)}
           />
           <input
             type="email"
             name="email"
+            required="required"
             value={this.state.email || ''}
             placeholder="Please enter your email"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangeEmail.bind(this)}
           />
           <label>Password:</label>
           <input
             type="password"
             name="password"
+            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+            required="required"
             value={this.state.password || ''}
             placeholder="Please enter your password"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangePassword.bind(this)}
           />
            <label>Confirm Password:</label>
           <input
             type="password"
             name="confirmPassword"
+            required="required"
             value={this.state.confirmPassword || ''}
             placeholder="Please confirm password"
-            onChange={this.handleChange.bind(this)}
+            onChange={this.handleChangeConfirm.bind(this)}
           />
           {
             this.state.password &&
