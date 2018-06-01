@@ -1,5 +1,4 @@
 import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { getGames, createGame } from '../actions/games'
@@ -69,10 +68,9 @@ const Button = styled.button`
 `
 
 class Game extends PureComponent {
-  static propTypes = {}
 
   renderGame(game) {
-    const { users, history, userId } = this.props
+    const { history, userId } = this.props
     const gamePlayers = game.players.map(player => player.user.id)
 
     return (
