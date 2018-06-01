@@ -31,7 +31,13 @@ export const isWinner = (word: string, guesses: string[]): boolean => {
       .toLowerCase()
       .split('')
       .filter(char => char.match(/[a-z0-9]+/g))
-      .join('') === guesses.join('')
+      .filter(char => !guesses.includes(char)).length === 0
+    // showGuess(word, guesses) === showGuess(word, Object.keys(defaultKeyboard))
+    // word
+    //   .toLowerCase()
+    //   .split('')
+    //   .filter(char => char.match(/[a-z0-9]+/g))
+    //   .join('') === guesses.join('')
   )
 }
 

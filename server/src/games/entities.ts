@@ -31,7 +31,7 @@ const defaultMovie: Movie = {
   poster: '/kHXEpyfl6zqn8a6YuozZUujufXf.jpg'
 }
 
-const defaultKeyboard = {
+export const defaultKeyboard = {
   a: 'false',
   b: 'false',
   c: 'false',

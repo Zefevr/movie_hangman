@@ -195,7 +195,7 @@ export default class GameController {
       }
 
       game.keyboard[guess.guess] = 'true'
-      game.guesses.push(guess.guess)
+      game.guesses = [...game.guesses, guess.guess]
 
       if (wrongGuess(game.movie.title, guess.guess)) {
         game.score > 500 ? (game.score -= 500) : null
