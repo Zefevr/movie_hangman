@@ -1,5 +1,5 @@
-# Movie_hangman
-> Multiplayer game made for Codaisseur
+# Movie Hangman
+> Multiplayer game made for Codaisseur by [Adam Belton](https://github.com/adambelton) and Ceferino Villalba
 
 A multiplayer hangman game built with React, Redux, Styled-Components, TypeScript, Koa, Routing-Controllers, TypeORM, Postgres and Socket.io.
 
